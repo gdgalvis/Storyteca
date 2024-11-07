@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import '../App.css'; 
+
+interface FormProps {
+  currentQuestionIndex: number;
+  handleNext: () => void;
+  handlePrevious: () => void;
+}
 
 interface FormData {
   name: string;
@@ -15,6 +20,7 @@ interface FormData {
   endingStyle: string;
 }
 
+
 const questions = [
   { label: 'What is your name?', type: 'text', name: 'name' },
   { label: 'How old are you?', type: 'number', name: 'age' },
@@ -29,7 +35,7 @@ const questions = [
   { label: 'How would you like the story to end?', type: 'select', name: 'endingStyle', options: ['Happy Ending', 'Surprise Twist', 'Everyone Becomes Friends', 'Finding Something Special'] },
 ];
 
-const Form: React.FC = () => {
+const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePrevious }) => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     age: 7,
@@ -43,7 +49,6 @@ const Form: React.FC = () => {
     favoriteColor: '',
     endingStyle: ''
   });
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -53,22 +58,10 @@ const Form: React.FC = () => {
     });
   };
 
-  const handleNext = () => {
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form data:', formData);
-    // Process the data or send it to the LLM for story creation
+    // This is where you would process the form data or send it to the LLM for story generation
   };
 
   const renderQuestion = () => {

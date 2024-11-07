@@ -1,14 +1,16 @@
 import React from 'react';
-import '../App.css'; 
-import reactImage from '../assets/react.svg';
 
-const ImageContainer: React.FC = () => {
+interface ImageContainerProps {
+  currentImage: string;
+}
+
+const ImageContainer: React.FC<ImageContainerProps> = ({ currentImage }) => {
   return (
-    <div className="image-container">
+    <div>
       <img
-        src={reactImage}
-        alt="React Logo"
-        style={{ maxWidth: '100%', height: 'auto' }}
+        src={currentImage}
+        alt="Question related visual"
+        style={{ maxWidth: '100%', height: 'auto', marginTop: '20px' }}
       />
     </div>
   );
