@@ -1,9 +1,11 @@
+// src/components/Form.tsx
 import React, { useState } from 'react';
 
 interface FormProps {
   currentQuestionIndex: number;
   handleNext: () => void;
   handlePrevious: () => void;
+  onSubmit: (formData: FormData) => void;  
 }
 
 interface FormData {
@@ -20,7 +22,6 @@ interface FormData {
   endingStyle: string;
 }
 
-
 const questions = [
   { label: 'What is your name?', type: 'text', name: 'name' },
   { label: 'How old are you?', type: 'number', name: 'age' },
@@ -35,7 +36,7 @@ const questions = [
   { label: 'How would you like the story to end?', type: 'select', name: 'endingStyle', options: ['Happy Ending', 'Surprise Twist', 'Everyone Becomes Friends', 'Finding Something Special'] },
 ];
 
-const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePrevious }) => {
+const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePrevious, onSubmit }) => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     age: 7,
@@ -60,8 +61,11 @@ const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePre
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form data:', formData);
-    // This is where you would process the form data or send it to the LLM for story generation
+    if (currentQuestionIndex === questions.length - 1) {
+      onSubmit(formData); 
+    } else {
+      handleNext();
+    }
   };
 
   const renderQuestion = () => {
