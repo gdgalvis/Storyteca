@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Title from './components/Title';
 import FormPage from './pages/FormPage';
-import StoryPage from './pages/Storypage';
+import StoryPage from './pages/StoryPage';
 
 const App: React.FC = () => {
   return (
