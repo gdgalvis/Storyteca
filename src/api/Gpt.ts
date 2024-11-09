@@ -9,12 +9,12 @@ const Story = async (prompt: string) => {
     },
     {
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${import.meta.env.REACT_APP_OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
     }
   );
-
+  console.log("API Key:", import.meta.env.VITE_OPENAI_API_KEY);
   return response.data.choices[0].message.content;
 };
 
