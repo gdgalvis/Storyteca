@@ -180,3 +180,35 @@ html, body, #root, .container {
     width: 90%;
   }
 }
+
+/* Narration Controls Styling */
+
+.narration-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.play-narration-button, .stop-narration-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: #28a745; 
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.stop-narration-button {
+  background-color: #dc3545; 
+}
+
+.play-narration-button:hover {
+  background-color: #218838;
+}
+
+.stop-narration-button:hover {
+  background-color: #c82333;
+}
