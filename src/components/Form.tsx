@@ -1,5 +1,5 @@
-// src/components/Form.tsx
 import React, { useState } from 'react';
+import ColorWheel from './ColorWheel';  
 
 interface FormProps {
   currentQuestionIndex: number;
@@ -29,10 +29,10 @@ const questions = [
   { label: 'Who would you like to be in the story?', type: 'select', name: 'role', options: ['Hero', 'Explorer', 'Wizard', 'Detective', 'Animal', 'Space Traveler'] },
   { label: 'Would you like any special friends or companions in the story?', type: 'select', name: 'companion', options: ['Magical Creature', 'Talking Animal', 'Robot', 'Imaginary Friend'] },
   { label: 'Where would you like the story to take place?', type: 'select', name: 'setting', options: ['Enchanted Forest', 'Outer Space', 'Underwater World', 'Magical Castle', 'Pirate Ship', 'Farm'] },
-  { label: 'What’s a special item or power you’d like to have?', type: 'text', name: 'specialItemOrPower' },
+  { label: 'What’s a special item or power you’d like to have?', type: 'select', name: 'specialItemOrPower', options: ['Magic Wand', 'Invisibility Cloak', 'Flying Boots', 'Time Travel Watch', 'Super Strength Potion'] },
   { label: 'What kind of challenge or problem would you like to solve in the story?', type: 'select', name: 'challenge', options: ['Find a Hidden Treasure', 'Save a Friend', 'Solve a Mystery', 'Escape a Tricky Maze', 'Rescue a Magical Creature'] },
-  { label: 'What’s your favorite animal or creature?', type: 'text', name: 'favoriteAnimal' },
-  { label: 'What’s your favorite color?', type: 'text', name: 'favoriteColor' },
+  { label: 'What’s your favorite animal or creature?', type: 'select', name: 'favoriteAnimal', options: ['Dragon', 'Unicorn', 'Phoenix', 'Tiger', 'Elephant', 'Owl'] },
+  { label: 'What’s your favorite color?', type: 'colorWheel', name: 'favoriteColor' },
   { label: 'How would you like the story to end?', type: 'select', name: 'endingStyle', options: ['Happy Ending', 'Surprise Twist', 'Everyone Becomes Friends', 'Finding Something Special'] },
 ];
 
@@ -59,12 +59,32 @@ const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePre
     });
   };
 
+  const handleColorSelect = (color: string) => {
+    setFormData({
+      ...formData,
+      favoriteColor: color
+    });
+  };
+
+  const handleNextWithValidation = () => {
+    const question = questions[currentQuestionIndex];
+    const answer = formData[question.name as keyof FormData];
+
+    // Validate that the current question has an answer
+    if (!answer) {
+      alert(`Please answer the question: "${question.label}"`);
+      return;
+    }
+
+    handleNext();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (currentQuestionIndex === questions.length - 1) {
       onSubmit(formData); 
     } else {
-      handleNext();
+      handleNextWithValidation();
     }
   };
 
@@ -72,43 +92,50 @@ const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePre
     const question = questions[currentQuestionIndex];
     const value = formData[question.name as keyof FormData] || '';
 
-    switch (question.type) {
-      case 'text':
-        return (
-          <input
-            type="text"
-            name={question.name}
-            value={value as string}
-            onChange={handleChange}
-            required
-          />
-        );
-      case 'number':
-        return (
-          <input
-            type="number"
-            name={question.name}
-            value={value as number}
-            onChange={handleChange}
-            min="5"
-            max="12"
-            required
-          />
-        );
-      case 'select':
-        return (
-          <select name={question.name} value={value as string} onChange={handleChange} required>
-            <option value="">Select...</option>
-            {question.options && question.options.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        );
-      default:
-        return null;
+    if (question.type === 'colorWheel') {
+      return <ColorWheel onColorSelect={handleColorSelect} />;
     }
+
+    if (question.type === 'select' && question.options) {
+      return (
+        <select name={question.name} value={value as string} onChange={handleChange} required>
+          <option value="">Select...</option>
+          {question.options.map((option, index) => (
+            <option key={index} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      );
+    }
+
+    if (question.type === 'text') {
+      return (
+        <input
+          type="text"
+          name={question.name}
+          value={value as string}
+          onChange={handleChange}
+          required
+        />
+      );
+    }
+
+    if (question.type === 'number') {
+      return (
+        <input
+          type="number"
+          name={question.name}
+          value={value as number}
+          onChange={handleChange}
+          min="5"
+          max="12"
+          required
+        />
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -125,7 +152,7 @@ const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePre
             </button>
           )}
           {currentQuestionIndex < questions.length - 1 ? (
-            <button type="button" onClick={handleNext}>
+            <button type="button" onClick={handleNextWithValidation}>
               Next →
             </button>
           ) : (
