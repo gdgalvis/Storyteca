@@ -19,23 +19,28 @@ import image11 from '../assets/image11.png';
 const images = [image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, image11];
 
 const FormPage: React.FC = () => {
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const navigate = useNavigate();
-  
-    const handleNext = () => {
-      if (currentQuestionIndex < images.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      }
-    };
-  
-    const handlePrevious = () => {
-      if (currentQuestionIndex > 0) {
-        setCurrentQuestionIndex(currentQuestionIndex - 1);
-      }
-    };
-  
-    const generatePromptForLLM = (formData: any) => {
-      return `Create a children's story based on the following details:
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [language, setLanguage] = useState<'en' | 'es'>('en'); // Estado para el idioma
+  const navigate = useNavigate();
+
+  const handleNext = () => {
+    if (currentQuestionIndex < images.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  };
+
+  const handleLanguageToggle = () => {
+    setLanguage(prevLanguage => (prevLanguage === 'en' ? 'es' : 'en'));
+  };
+
+  const generatePromptForLLM = (formData: any) => {
+    return `Create a children's story based on the following details:
       
       - Name: ${formData.name}
       - Age: ${formData.age}
@@ -50,28 +55,47 @@ const FormPage: React.FC = () => {
       - Desired Ending: ${formData.endingStyle}
       
       Craft a fun and engaging story for a young child based on these preferences.`;
-    };
-  
-    const handleFormSubmit = (formData: any) => {
-      const storyPrompt = generatePromptForLLM(formData);
-      navigate('/story', { state: { storyText: storyPrompt } });  // Navigate to Story page with story prompt
-    };
-  
-    return (
-      <div className="content">
-        <div className="form-container">
-          <Form
-            currentQuestionIndex={currentQuestionIndex}
-            handleNext={handleNext}
-            handlePrevious={handlePrevious}
-            onSubmit={handleFormSubmit}  // Pass handleFormSubmit to Form component
-          />
-        </div>
-        <div className="image-container">
-          <ImageContainer currentImage={images[currentQuestionIndex]} />
-        </div>
-      </div>
-    );
   };
-  
-  export default FormPage;
+
+  const handleFormSubmit = (formData: any) => {
+    const storyPrompt = generatePromptForLLM(formData);
+    navigate('/story', { state: { storyText: storyPrompt } });  // Navigate to Story page with story prompt
+  };
+
+  return (
+    <div className="content">
+      <button
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }}
+        onClick={handleLanguageToggle}
+      >
+        {language === 'en' ? 'English' : 'Español'}
+      </button>
+
+      <div className="form-container">
+        <Form
+          currentQuestionIndex={currentQuestionIndex}
+          handleNext={handleNext}
+          handlePrevious={handlePrevious}
+          onSubmit={handleFormSubmit}
+          language={language} // Pasar el idioma al componente Form
+        />
+      </div>
+
+      <div className="image-container">
+        <ImageContainer currentImage={images[currentQuestionIndex]} />
+      </div>
+    </div>
+  );
+};
+
+export default FormPage;
