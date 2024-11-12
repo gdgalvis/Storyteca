@@ -78,7 +78,7 @@ const FormPage: React.FC = () => {
         }}
         onClick={handleLanguageToggle}
       >
-        {language === 'en' ? 'English' : 'Español'}
+        {language === 'en' ? 'Español' : 'English'}
       </button>
 
       <div className="form-container">
