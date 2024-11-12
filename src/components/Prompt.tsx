@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Story from "../api/Gpt";
+import r1 from "../../gpt.cjs";
 //src\API
 const ChatComponent = () => {
   const [prompt, setPrompt] = useState('');
