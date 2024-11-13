@@ -16,5 +16,4 @@ r1.on('close', () => {
     console.log('Prompt completed. Exiting process.');
     process.exit(0); // Ensures the process exits
 });
-console.log('Prompt completed. Exiting process.');
-process.exit(0); // Ensures the process exits
+
