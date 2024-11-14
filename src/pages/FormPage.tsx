@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form from '../components/Form';
 import ImageContainer from '../components/ImageContainer';
-import Spinner from '../components/Spinner';
+import Spinner from '../components/Spinner'; 
 
 import image1 from '../assets/image1.png';
 import image2 from '../assets/image2.png';
@@ -21,7 +21,7 @@ const images = [image1, image2, image3, image4, image5, image6, image7, image8, 
 const FormPage: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [language, setLanguage] = useState<'en' | 'es'>('en');
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/openai';
@@ -82,7 +82,7 @@ const FormPage: React.FC = () => {
 
   const handleFormSubmit = async (formData: any) => {
     const storyPrompt = await generatePromptForLLM(formData);
-    setLoading(true); // Set loading to true before API call
+    setLoading(true); 
     
     try {
       const response = await fetch(API_URL, {
@@ -98,7 +98,7 @@ const FormPage: React.FC = () => {
     } catch (error) {
       console.error('Error generating story:', error);
     } finally {
-      setLoading(false); // Set loading to false after API call
+      setLoading(false); 
     }
   };
 
@@ -121,11 +121,13 @@ const FormPage: React.FC = () => {
         {language === 'en' ? 'Español' : 'English'}
       </button>
 
-      {loading ? ( // Show spinner if loading
-        <div className="spinner-container">
+      {loading && (
+        <div className="loading-overlay">
           <Spinner />
         </div>
-      ) : (
+      )}
+
+      {!loading && (
         <>
           <div className="form-container">
             <Form
