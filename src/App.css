@@ -37,6 +37,7 @@ html, body, #root, .container {
   margin: 0 auto; 
   background-color: rgba(255, 255, 255, 0.8); /* Slight overlay for readability */
   border-radius: 10px;
+  overflow-y: scroll;
 }
 
 /* Title Styling */
@@ -135,11 +136,14 @@ html, body, #root, .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: bottom;
   padding: 20px;
   text-align: center;
   width: 100%;
-  height: 100%;
+  
+  height: 100%; 
+  /*height: 100vh;*/
+  /*max-height: 100vh;*/
   background-color: rgba(249, 249, 249, 0.85); /* Add slight overlay */
 }
 

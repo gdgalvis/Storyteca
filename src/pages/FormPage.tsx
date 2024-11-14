@@ -41,7 +41,7 @@ const FormPage: React.FC = () => {
   };
 
   const generatePromptForLLM = async (formData: any) => {
-    return `Create a children's story based on the following details:
+    let prompt = `Create a children's story based on the following details:
       
       - Name: ${formData.name}
       - Age: ${formData.age}
@@ -56,12 +56,47 @@ const FormPage: React.FC = () => {
       - Desired Ending: ${formData.endingStyle}
       
       Craft a fun and engaging story for a young child based on these preferences.`;
+  
+    if (language === 'es') {
+      prompt = `Crea una historia para niños basada en los siguientes detalles:
+        
+        - Nombre: ${formData.name}
+        - Edad: ${formData.age}
+        - Tipo de historia: ${formData.storyType}
+        - Rol en la historia: ${formData.role}
+        - Compañero: ${formData.companion}
+        - Escenario: ${formData.setting}
+        - Objeto especial o poder: ${formData.specialItemOrPower}
+        - Desafío: ${formData.challenge}
+        - Animal favorito: ${formData.favoriteAnimal}
+        - Color favorito: ${formData.favoriteColor}
+        - Final deseado: ${formData.endingStyle}
+        
+        Crea una historia divertida y atractiva para un niño pequeño basada en estas preferencias.`;
+    }
+  
+    return prompt;
   };
+
 
   const handleFormSubmit = async (formData: any) => {
     const storyPrompt = await generatePromptForLLM(formData);
     
-    navigate('/story', { state: { storyText: storyPrompt } });  // Navigate to Story page with story prompt
+    try {
+      const response = await fetch('http://localhost:3000/api/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: storyPrompt }),
+      });
+      const data = await response.json();
+      const storyText = data.choices?.[0]?.message?.content || 'Error, connection but no generation.';
+      navigate('/story', { state: { storyText } });
+  
+    } catch (error) {
+      console.error('Error generating story:', error);
+    }
   };
 
   return (
