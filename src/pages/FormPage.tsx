@@ -101,22 +101,24 @@ const FormPage: React.FC = () => {
 
   return (
     <div className="content">
-      <button
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          backgroundColor: '#007bff',
-          color: 'white',
-          border: 'none',
-          padding: '10px 20px',
-          borderRadius: '5px',
-          cursor: 'pointer'
-        }}
-        onClick={handleLanguageToggle}
-      >
-        {language === 'en' ? 'Español' : 'English'}
-      </button>
+      {currentQuestionIndex === 0 && (
+        <button
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+          onClick={handleLanguageToggle}
+        >
+          {language === 'en' ? 'Español' : 'English'}
+        </button>
+      )}
 
       <div className="form-container">
         <Form
