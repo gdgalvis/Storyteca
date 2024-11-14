@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form from '../components/Form';
 import ImageContainer from '../components/ImageContainer';
+//import openaiController from '../controllers/openaiController.mjs';
 
 import image1 from '../assets/image1.png';
 import image2 from '../assets/image2.png';
@@ -39,7 +40,7 @@ const FormPage: React.FC = () => {
     setLanguage(prevLanguage => (prevLanguage === 'en' ? 'es' : 'en'));
   };
 
-  const generatePromptForLLM = (formData: any) => {
+  const generatePromptForLLM = async (formData: any) => {
     return `Create a children's story based on the following details:
       
       - Name: ${formData.name}
@@ -57,8 +58,9 @@ const FormPage: React.FC = () => {
       Craft a fun and engaging story for a young child based on these preferences.`;
   };
 
-  const handleFormSubmit = (formData: any) => {
-    const storyPrompt = generatePromptForLLM(formData);
+  const handleFormSubmit = async (formData: any) => {
+    const storyPrompt = await generatePromptForLLM(formData);
+    
     navigate('/story', { state: { storyText: storyPrompt } });  // Navigate to Story page with story prompt
   };
 
