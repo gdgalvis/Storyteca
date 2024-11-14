@@ -6,11 +6,13 @@ import Title from './components/Title';
 import FormPage from './pages/FormPage';
 import StoryPage from './pages/StoryPage';
 
+//import ImageContainer from './components/ImageContainer';
+//<ImageContainer />
 const App: React.FC = () => {
   return (
     <Router>
       <div className="container">
-        <Title />
+        <Title/>
         <Routes>
           <Route path="/" element={<FormPage />} />
           <Route path="/story" element={<StoryPage />} />

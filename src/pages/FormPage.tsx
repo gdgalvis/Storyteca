@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form from '../components/Form';
@@ -20,8 +19,10 @@ const images = [image1, image2, image3, image4, image5, image6, image7, image8, 
 
 const FormPage: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [language, setLanguage] = useState<'en' | 'es'>('en'); // Estado para el idioma
+  const [language, setLanguage] = useState<'en' | 'es'>('en');
   const navigate = useNavigate();
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/openai';
 
   const handleNext = () => {
     if (currentQuestionIndex < images.length - 1) {
@@ -36,11 +37,11 @@ const FormPage: React.FC = () => {
   };
 
   const handleLanguageToggle = () => {
-    setLanguage(prevLanguage => (prevLanguage === 'en' ? 'es' : 'en'));
+    setLanguage((prevLanguage) => (prevLanguage === 'en' ? 'es' : 'en'));
   };
 
-  const generatePromptForLLM = (formData: any) => {
-    return `Create a children's story based on the following details:
+  const generatePromptForLLM = async (formData: any) => {
+    let prompt = `Create a children's story based on the following details:
       
       - Name: ${formData.name}
       - Age: ${formData.age}
@@ -55,11 +56,46 @@ const FormPage: React.FC = () => {
       - Desired Ending: ${formData.endingStyle}
       
       Craft a fun and engaging story for a young child based on these preferences.`;
+
+    if (language === 'es') {
+      prompt = `Crea una historia para niños basada en los siguientes detalles:
+        
+        - Nombre: ${formData.name}
+        - Edad: ${formData.age}
+        - Tipo de historia: ${formData.storyType}
+        - Rol en la historia: ${formData.role}
+        - Compañero: ${formData.companion}
+        - Escenario: ${formData.setting}
+        - Objeto especial o poder: ${formData.specialItemOrPower}
+        - Desafío: ${formData.challenge}
+        - Animal favorito: ${formData.favoriteAnimal}
+        - Color favorito: ${formData.favoriteColor}
+        - Final deseado: ${formData.endingStyle}
+        
+        Crea una historia divertida y atractiva para un niño pequeño basada en estas preferencias.`;
+    }
+
+    return prompt;
   };
 
-  const handleFormSubmit = (formData: any) => {
-    const storyPrompt = generatePromptForLLM(formData);
-    navigate('/story', { state: { storyText: storyPrompt } });  // Navigate to Story page with story prompt
+  const handleFormSubmit = async (formData: any) => {
+    const storyPrompt = await generatePromptForLLM(formData);
+    
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: storyPrompt }),
+      });
+      const data = await response.json();
+      const storyText = data.choices?.[0]?.message?.content || 'Error: Unable to generate story.';
+      navigate('/story', { state: { storyText } });
+  
+    } catch (error) {
+      console.error('Error generating story:', error);
+    }
   };
 
   return (
@@ -87,7 +123,7 @@ const FormPage: React.FC = () => {
           handleNext={handleNext}
           handlePrevious={handlePrevious}
           onSubmit={handleFormSubmit}
-          language={language} // Pasar el idioma al componente Form
+          language={language}
         />
       </div>
 

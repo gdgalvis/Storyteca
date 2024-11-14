@@ -172,7 +172,7 @@ const Form: React.FC<FormProps> = ({ currentQuestionIndex, handleNext, handlePre
               {language === 'es' ? 'Siguiente →' : 'Next →'}
             </button>
           ) : (
-            <button type="submit">
+            <button type="submit" >
               {language === 'es' ? 'Enviar' : 'Submit'}
             </button>
           )}
