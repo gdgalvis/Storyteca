@@ -1,9 +1,7 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form from '../components/Form';
 import ImageContainer from '../components/ImageContainer';
-//import openaiController from '../controllers/openaiController.mjs';
 
 import image1 from '../assets/image1.png';
 import image2 from '../assets/image2.png';
@@ -21,8 +19,10 @@ const images = [image1, image2, image3, image4, image5, image6, image7, image8, 
 
 const FormPage: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [language, setLanguage] = useState<'en' | 'es'>('en'); // Estado para el idioma
+  const [language, setLanguage] = useState<'en' | 'es'>('en');
   const navigate = useNavigate();
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/openai';
 
   const handleNext = () => {
     if (currentQuestionIndex < images.length - 1) {
@@ -37,7 +37,7 @@ const FormPage: React.FC = () => {
   };
 
   const handleLanguageToggle = () => {
-    setLanguage(prevLanguage => (prevLanguage === 'en' ? 'es' : 'en'));
+    setLanguage((prevLanguage) => (prevLanguage === 'en' ? 'es' : 'en'));
   };
 
   const generatePromptForLLM = async (formData: any) => {
@@ -56,7 +56,7 @@ const FormPage: React.FC = () => {
       - Desired Ending: ${formData.endingStyle}
       
       Craft a fun and engaging story for a young child based on these preferences.`;
-  
+
     if (language === 'es') {
       prompt = `Crea una historia para niños basada en los siguientes detalles:
         
@@ -74,16 +74,15 @@ const FormPage: React.FC = () => {
         
         Crea una historia divertida y atractiva para un niño pequeño basada en estas preferencias.`;
     }
-  
+
     return prompt;
   };
-
 
   const handleFormSubmit = async (formData: any) => {
     const storyPrompt = await generatePromptForLLM(formData);
     
     try {
-      const response = await fetch('http://localhost:3000/api/openai', {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,7 +90,7 @@ const FormPage: React.FC = () => {
         body: JSON.stringify({ prompt: storyPrompt }),
       });
       const data = await response.json();
-      const storyText = data.choices?.[0]?.message?.content || 'Error, connection but no generation.';
+      const storyText = data.choices?.[0]?.message?.content || 'Error: Unable to generate story.';
       navigate('/story', { state: { storyText } });
   
     } catch (error) {
@@ -101,24 +100,22 @@ const FormPage: React.FC = () => {
 
   return (
     <div className="content">
-      {currentQuestionIndex === 0 && (
-        <button
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-          onClick={handleLanguageToggle}
-        >
-          {language === 'en' ? 'Español' : 'English'}
-        </button>
-      )}
+      <button
+        style={{
+          position: 'absolute',
+          top: '10px',
+          right: '10px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          cursor: 'pointer'
+        }}
+        onClick={handleLanguageToggle}
+      >
+        {language === 'en' ? 'Español' : 'English'}
+      </button>
 
       <div className="form-container">
         <Form
@@ -126,7 +123,7 @@ const FormPage: React.FC = () => {
           handleNext={handleNext}
           handlePrevious={handlePrevious}
           onSubmit={handleFormSubmit}
-          language={language} // Pasar el idioma al componente Form
+          language={language}
         />
       </div>
 
