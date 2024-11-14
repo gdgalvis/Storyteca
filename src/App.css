@@ -37,7 +37,7 @@ html, body, #root, .container {
   margin: 0 auto; 
   background-color: rgba(255, 255, 255, 0.8); /* Slight overlay for readability */
   border-radius: 10px;
-  overflow-y: scroll;
+  
 }
 
 /* Title Styling */
@@ -145,6 +145,7 @@ html, body, #root, .container {
   /*height: 100vh;*/
   /*max-height: 100vh;*/
   background-color: rgba(249, 249, 249, 0.85); /* Add slight overlay */
+  overflow-y: scroll;
 }
 
 .story-container h1 {
