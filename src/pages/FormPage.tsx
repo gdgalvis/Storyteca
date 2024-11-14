@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form from '../components/Form';
 import ImageContainer from '../components/ImageContainer';
+import Spinner from '../components/Spinner';
 
 import image1 from '../assets/image1.png';
 import image2 from '../assets/image2.png';
@@ -20,6 +21,7 @@ const images = [image1, image2, image3, image4, image5, image6, image7, image8, 
 const FormPage: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [language, setLanguage] = useState<'en' | 'es'>('en');
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/openai';
@@ -80,6 +82,7 @@ const FormPage: React.FC = () => {
 
   const handleFormSubmit = async (formData: any) => {
     const storyPrompt = await generatePromptForLLM(formData);
+    setLoading(true); // Set loading to true before API call
     
     try {
       const response = await fetch(API_URL, {
@@ -92,9 +95,10 @@ const FormPage: React.FC = () => {
       const data = await response.json();
       const storyText = data.choices?.[0]?.message?.content || 'Error: Unable to generate story.';
       navigate('/story', { state: { storyText } });
-  
     } catch (error) {
       console.error('Error generating story:', error);
+    } finally {
+      setLoading(false); // Set loading to false after API call
     }
   };
 
@@ -117,19 +121,27 @@ const FormPage: React.FC = () => {
         {language === 'en' ? 'Español' : 'English'}
       </button>
 
-      <div className="form-container">
-        <Form
-          currentQuestionIndex={currentQuestionIndex}
-          handleNext={handleNext}
-          handlePrevious={handlePrevious}
-          onSubmit={handleFormSubmit}
-          language={language}
-        />
-      </div>
+      {loading ? ( // Show spinner if loading
+        <div className="spinner-container">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <div className="form-container">
+            <Form
+              currentQuestionIndex={currentQuestionIndex}
+              handleNext={handleNext}
+              handlePrevious={handlePrevious}
+              onSubmit={handleFormSubmit}
+              language={language}
+            />
+          </div>
 
-      <div className="image-container">
-        <ImageContainer currentImage={images[currentQuestionIndex]} />
-      </div>
+          <div className="image-container">
+            <ImageContainer currentImage={images[currentQuestionIndex]} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

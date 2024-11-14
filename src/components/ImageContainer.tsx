@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ImageContainerProps {
   currentImage: string;
 }
 
 const ImageContainer: React.FC<ImageContainerProps> = ({ currentImage }) => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setVisible(false);
+
+
+    const timeout = setTimeout(() => {
+      setVisible(true);
+    }, 100); 
+
+    return () => clearTimeout(timeout);
+  }, [currentImage]);
+
   return (
-    <div>
-      <img
-        src={currentImage}
-        alt="Question related visual"
-        style={{ maxWidth: '100%', height: 'auto', marginTop: '20px' }}
-      />
+    <div className={`image-container ${visible ? 'fade-in' : 'fade-out'}`}>
+      <img src={currentImage} alt="Question related visual" />
     </div>
   );
 };
