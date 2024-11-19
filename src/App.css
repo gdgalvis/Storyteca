@@ -121,7 +121,7 @@ html, body, #root, .container {
   align-items: center;
   justify-content: center;
   width: 100%;
-  transition: opacity 0.5s ease-in-out;
+  
 }
 
 .image-container img {
@@ -132,14 +132,7 @@ html, body, #root, .container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Fade effect classes */
-.fade-in {
-  opacity: 1;
-}
 
-.fade-out {
-  opacity: 0;
-}
 
 /* StoryPage Styling */
 
