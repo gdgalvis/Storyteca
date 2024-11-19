@@ -43,38 +43,38 @@ const FormPage: React.FC = () => {
   };
 
   const generatePromptForLLM = async (formData: any) => {
-    let prompt = `Create a children's story based on the following details:
-      
-      - Name: ${formData.name}
+    let prompt = `Create an imaginative and engaging children's story tailored for a primary school child based on the following details: 
+
+      - Child's Name: ${formData.name}
       - Age: ${formData.age}
-      - Story Type: ${formData.storyType}
-      - Role in the story: ${formData.role}
-      - Companion: ${formData.companion}
-      - Setting: ${formData.setting}
-      - Special Item or Power: ${formData.specialItemOrPower}
-      - Challenge: ${formData.challenge}
-      - Favorite Animal: ${formData.favoriteAnimal}
-      - Favorite Color: ${formData.favoriteColor}
-      - Desired Ending: ${formData.endingStyle}
-      
-      Craft a fun and engaging story for a young child based on these preferences.`;
+      - Type of Story (e.g., adventure, mystery, fantasy): ${formData.storyType}
+      - Child's Role in the Story (e.g., hero, explorer, problem-solver): ${formData.role}
+      - Companion Character (e.g., a talking dog, a magical friend): ${formData.companion}
+      - Setting of the Story (e.g., a jungle, a magical castle, the ocean): ${formData.setting}
+      - Special Item or Magical Power: ${formData.specialItemOrPower}
+      - Main Challenge or Problem to Solve: ${formData.challenge}
+      - Favorite Animal (to include in the story, maybe as a sidekick): ${formData.favoriteAnimal}
+      - Favorite Color (to influence descriptions or themes): ${formData.favoriteColor}
+      - Desired Ending Style (e.g., happy, surprising, heartwarming): ${formData.endingStyle}
+
+Please write a fun, age-appropriate story for a young child that incorporates these details creatively. Use language and themes suitable for a primary education level and ensure the story is engaging and easy to follow.`;
 
     if (language === 'es') {
-      prompt = `Crea una historia para niños basada en los siguientes detalles:
-        
-        - Nombre: ${formData.name}
-        - Edad: ${formData.age}
-        - Tipo de historia: ${formData.storyType}
-        - Rol en la historia: ${formData.role}
-        - Compañero: ${formData.companion}
-        - Escenario: ${formData.setting}
-        - Objeto especial o poder: ${formData.specialItemOrPower}
-        - Desafío: ${formData.challenge}
-        - Animal favorito: ${formData.favoriteAnimal}
-        - Color favorito: ${formData.favoriteColor}
-        - Final deseado: ${formData.endingStyle}
-        
-        Crea una historia divertida y atractiva para un niño pequeño basada en estas preferencias.`;
+      prompt = `Crea una historia imaginativa y divertida para niños, adaptada a un niño de educación primaria, basada en los siguientes detalles: 
+
+      - Nombre del niño: ${formData.name}
+      - Edad: ${formData.age}
+      - Tipo de historia (por ejemplo, aventura, misterio, fantasía): ${formData.storyType}
+      - Rol del niño en la historia (por ejemplo, héroe, explorador, solucionador de problemas): ${formData.role}
+      - Compañero del personaje (por ejemplo, un perro que habla, un amigo mágico): ${formData.companion}
+      - Escenario de la historia (por ejemplo, una jungla, un castillo mágico, el océano): ${formData.setting}
+      - Objeto especial o poder mágico: ${formData.specialItemOrPower}
+      - Principal desafío o problema a resolver: ${formData.challenge}
+      - Animal favorito (para incluir en la historia): ${formData.favoriteAnimal}
+      - Color favorito (para influir en descripciones o temas): ${formData.favoriteColor}
+      - Tipo de final deseado (por ejemplo, feliz, sorprendente, conmovedor): ${formData.endingStyle}
+
+Por favor, escribe una historia divertida y adecuada para la edad de un niño pequeño que incorpore estos detalles de manera creativa. Usa un lenguaje sencillo y temas apropiados para niños de educación primaria, asegurándote de que la historia sea atractiva y fácil de seguir.`;
     }
 
     return prompt;
