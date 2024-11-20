@@ -13,7 +13,7 @@ const StoryPage: React.FC = () => {
   const { storyText } = location.state as LocationState;
 
   const handleBackToForm = () => {
-    navigate('/');
+    navigate('/form');
   };
 
   const speakStory = () => {
