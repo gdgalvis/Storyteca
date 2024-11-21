@@ -42,12 +42,13 @@ html, body, #root, .container {
 
 /* Title Styling */
 
-.title {
+h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   font-size: 2.5rem;
-  padding: 20px 0;
+  padding-top: 30px;
   color: white;
 }
 
