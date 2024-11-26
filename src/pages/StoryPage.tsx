@@ -5,12 +5,13 @@ import html2canvas from 'html2canvas';
 
 interface LocationState {
   storyText: string;
+  language: 'en' | 'es'; 
 }
 
 const StoryPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { storyText } = location.state as LocationState;
+  const { storyText, language } = location.state as LocationState; 
 
   const handleBackToForm = () => {
     navigate('/form');
@@ -49,7 +50,7 @@ const StoryPage: React.FC = () => {
       
       pdf.addImage(imgData, 'PNG', 20, 20, pdf.internal.pageSize.width - 40, pdf.internal.pageSize.height - 40);
       
-      pdf.save('Custom_Story.pdf');
+      pdf.save(language === 'en' ? 'Custom_Story.pdf' : 'Historia_Personalizada.pdf');
     }
   };
 
@@ -70,24 +71,24 @@ const StoryPage: React.FC = () => {
           cursor: 'pointer'
         }}
       >
-        Download as PDF
+        {language === 'en' ? 'Download as PDF' : 'Descargar como PDF'}
       </button>
       
-      <h1>Your Custom Story</h1>
+      <h1>{language === 'en' ? 'Here is your Story!' : '¡Aqui esta tu Historia!'}</h1>
       <div id="story-content" className="story-content">
         <p>{storyText}</p>
       </div>
       
       <div className="narration-controls">
         <button onClick={speakStory} className="play-narration-button">
-          Play Narration
+          {language === 'en' ? 'Play Narration' : 'Reproducir Narración'}
         </button>
         <button onClick={stopNarration} className="stop-narration-button">
-          Stop Narration
+          {language === 'en' ? 'Stop Narration' : 'Detener Narración'}
         </button>
       </div>
       <button onClick={handleBackToForm} className="back-to-form-button">
-        Let's Create Another Story!
+        {language === 'en' ? "Let's Create Another Story!" : '¡Crea Otra Historia!'}
       </button>
     </div>
   );

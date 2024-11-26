@@ -94,7 +94,7 @@ Por favor, escribe una historia divertida y adecuada para la edad de un niño pe
       });
       const data = await response.json();
       const storyText = data.choices?.[0]?.message?.content || 'Error: Unable to generate story.';
-      navigate('/story', { state: { storyText } });
+      navigate('/story', { state: { storyText, language } });
     } catch (error) {
       console.error('Error generating story:', error);
     } finally {
