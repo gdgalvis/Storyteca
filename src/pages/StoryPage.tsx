@@ -20,16 +20,25 @@ const StoryPage: React.FC = () => {
   const speakStory = () => {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(storyText);
-    utterance.rate = 0.9;
-    utterance.pitch = 1.2;
+    utterance.rate = 1;
+    utterance.pitch = 1;
 
     const voices = window.speechSynthesis.getVoices();
-    const childFriendlyVoice = voices.find(
-      (voice) => voice.name.includes("Google UK English Female") || voice.name.includes("Microsoft Zira")
-    );
 
-    if (childFriendlyVoice) {
-      utterance.voice = childFriendlyVoice;
+    
+    const selectedVoice = voices.find((voice) => {
+      if (language === 'en') {
+        return voice.name.includes("Google UK English Female");
+      } else if (language === 'es') {
+        return voice.name.includes("Microsoft Laura - Spanish");
+      }
+      return false;
+    });
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    } else {
+      console.warn('No suitable voice found for the selected language');
     }
 
     window.speechSynthesis.speak(utterance);
