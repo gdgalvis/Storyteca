@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Form from '../components/Form';
 import ImageContainer from '../components/ImageContainer';
-import Spinner from '../components/Spinner'; 
+import Spinner from '../components/Spinner';
 
 import image1 from '../assets/image1.png';
 import image2 from '../assets/image2.png';
@@ -21,7 +21,7 @@ const images = [image1, image2, image3, image4, image5, image6, image7, image8, 
 const FormPage: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [language, setLanguage] = useState<'en' | 'es'>('en');
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/openai';
@@ -60,7 +60,7 @@ const FormPage: React.FC = () => {
 Please write a fun, age-appropriate story for a young child that incorporates these details creatively. Use language and themes suitable for a primary education level and ensure the story is engaging and easy to follow.`;
 
     if (language === 'es') {
-      prompt = `Crea una historia imaginativa y divertida para niños, adaptada a un niño de educación primaria, basada en los siguientes detalles: 
+      prompt = `Crea en español una historia imaginativa y divertida para niños, adaptada a un niño de educación primaria, basada en los siguientes detalles: 
 
       - Nombre del niño: ${formData.name}
       - Edad: ${formData.age}
@@ -82,8 +82,8 @@ Por favor, escribe una historia divertida y adecuada para la edad de un niño pe
 
   const handleFormSubmit = async (formData: any) => {
     const storyPrompt = await generatePromptForLLM(formData);
-    setLoading(true); 
-    
+    setLoading(true);
+
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -98,7 +98,7 @@ Por favor, escribe una historia divertida y adecuada para la edad de un niño pe
     } catch (error) {
       console.error('Error generating story:', error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -109,14 +109,15 @@ Por favor, escribe una historia divertida y adecuada para la edad de un niño pe
           position: 'absolute',
           top: '10px',
           right: '10px',
-          backgroundColor: '#007bff',
+          backgroundColor: currentQuestionIndex === 0 ? '#007bff' : '#aaa',
           color: 'white',
           border: 'none',
           padding: '10px 20px',
           borderRadius: '5px',
-          cursor: 'pointer'
+          cursor: currentQuestionIndex === 0 ? 'pointer' : 'not-allowed',
         }}
-        onClick={handleLanguageToggle}
+        onClick={currentQuestionIndex === 0 ? handleLanguageToggle : undefined}
+        disabled={currentQuestionIndex !== 0}
       >
         {language === 'en' ? 'Español' : 'English'}
       </button>
