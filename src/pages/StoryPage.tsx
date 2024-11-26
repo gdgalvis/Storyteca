@@ -28,7 +28,7 @@ const StoryPage: React.FC = () => {
     
     const selectedVoice = voices.find((voice) => {
       if (language === 'en') {
-        return voice.name.includes("Google UK English Female");
+        return voice.name.includes("Microsoft Anna - English");
       } else if (language === 'es') {
         return voice.name.includes("Microsoft Laura - Spanish");
       }
